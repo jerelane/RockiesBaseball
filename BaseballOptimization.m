@@ -210,6 +210,9 @@ beq(2) = 25;
 
 c = repmat(WAR,10);
 c = c(:,1);
+P = [P0,P1,P2,P3,P4,P5,P6,P7,P8,P9]';
+c = c.*P;
+
 
 play = repmat(player,10);
 play = play(:,1);
@@ -228,8 +231,9 @@ intcon = (1:length(c))';
 f = -c;
 lb = zeros(length(c),1);
 ub = ones(length(c),1);
+tic
 x = intlinprog(f,intcon,A,b,Aeq,beq,lb,ub);
-
+toc
 % now find which players made the cut!
 
 list = find(x);
@@ -244,7 +248,16 @@ rosterWAR = c(list);
 optWAR = sum(rosterWAR);
 rostersalary = A(end,list);
 
+%% call this function to see how WAR changes with budget
+Blim = 200000000;
+[WAR,Brange] = WARvar(f,intcon,A,b,Aeq,beq,lb,ub,Blim);
 
+
+figure
+plot(Brange/(1e6),WAR,'LineWidth',2)
+title('WAR vs Budget')
+xlabel('Budget (Millions of Dollars)')
+ylabel('Total WAR')
 
 
 
