@@ -127,75 +127,82 @@ A(1,:) = -[P0,zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),
 b(1) = -7;
 
 % starters - EQUALITY CONSTRAINT
-A(2,:) = [zeros(1,L),P1,zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),...
+Aeq(1,:) = [zeros(1,L),P1,zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),...
     zeros(1,L),zeros(1,L),zeros(1,L)];
-b(2) = 5;
-A(3,:) = -A(2,:);
-b(3) = -5;
+beq(1) = 5;
+
+% A(2,:) = [zeros(1,L),P1,zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),...
+%     zeros(1,L),zeros(1,L),zeros(1,L)];
+% b(2) = 5;
+% A(3,:) = -A(2,:);
+% b(3) = -5;
 
 % catchers
-A(4,:) = -[zeros(1,L),zeros(1,L),P2,zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),...
+A(2,:) = -[zeros(1,L),zeros(1,L),P2,zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),...
     zeros(1,L),zeros(1,L),zeros(1,L)];
-b(4) = -2;
+b(2) = -2;
 % 1B
-A(5,:) = -[zeros(1,L),zeros(1,L),zeros(1,L),P3,zeros(1,L),zeros(1,L),zeros(1,L),...
+A(3,:) = -[zeros(1,L),zeros(1,L),zeros(1,L),P3,zeros(1,L),zeros(1,L),zeros(1,L),...
+    zeros(1,L),zeros(1,L),zeros(1,L)];
+b(3) = -1;
+% 2B
+A(4,:) = -[zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),P4,zeros(1,L),zeros(1,L),...
+    zeros(1,L),zeros(1,L),zeros(1,L)];
+b(4) = -1;
+% 3B
+A(5,:) = -[zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),P5,zeros(1,L),...
     zeros(1,L),zeros(1,L),zeros(1,L)];
 b(5) = -1;
-% 2B
-A(6,:) = -[zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),P4,zeros(1,L),zeros(1,L),...
+% SS
+A(6,:) = -[zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),P6,...
     zeros(1,L),zeros(1,L),zeros(1,L)];
 b(6) = -1;
-% 3B
-A(7,:) = -[zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),P5,zeros(1,L),...
-    zeros(1,L),zeros(1,L),zeros(1,L)];
-b(7) = -1;
-% SS
-A(8,:) = -[zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),P6,...
-    zeros(1,L),zeros(1,L),zeros(1,L)];
-b(8) = -1;
 % infielders
-A(9,:) = -[zeros(1,L),zeros(1,L),zeros(1,L),P3,P4,P5,P6,...
+A(7,:) = -[zeros(1,L),zeros(1,L),zeros(1,L),P3,P4,P5,P6,...
     zeros(1,L),zeros(1,L),zeros(1,L)];
-b(9) = -5;
+b(7) = -5;
 % LF
-A(10,:) = -[zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),...
+A(8,:) = -[zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),...
     P7,zeros(1,L),zeros(1,L)];
-b(10) = -1;
+b(8) = -1;
 % CF
-A(11,:) = -[zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),...
+A(9,:) = -[zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),...
     zeros(1,L),P8,zeros(1,L)];
-b(11) = -1;
+b(9) = -1;
 % RF
-A(12,:) = -[zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),...
+A(10,:) = -[zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),...
     zeros(1,L),zeros(1,L),P9];
-b(12) = -1;
+b(10) = -1;
 % outfielders
-A(13,:) = -[zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),...
+A(11,:) = -[zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),...
     P7,P8,P9];
-b(13) = -4;
+b(11) = -4;
 
 % versatility constraint
 for i = 1:L
-    A(13+i,:) = zeros(1,10*L);
+    A(11+i,:) = zeros(1,10*L);
     for j = 0:9
-        A(13+i,i+j*L) = 1;
+        A(11+i,i+j*L) = 1;
     end
-    b(13+i) = 1;
+    b(11+i) = 1;
 end
 
 % salary constraint
 a = repmat(sal,10);
 a = a(:,1);
 a = a'; % row vector
-A(13+L+1,:) = a;
+A(11+L+1,:) = a;
 B = 11501312; % FA budget (adjust this as needed) 
-b(13+L+1) = B;
+b(11+L+1) = B;
 
 % lastly: only 25 players allowed - EQUALITY CONSTRAINT
-A(13+L+2,:) = [P0,P1,P2,P3,P4,P5,P6,P7,P8,P9];
-b(13+L+2) = 25;
-A(13+L+3,:) = -[P0,P1,P2,P3,P4,P5,P6,P7,P8,P9];
-b(13+L+3) = -25;
+% Aeq(2,:) = [P0,P1,P2,P3,P4,P5,P6,P7,P8,P9];
+Aeq(2,:) = ones(1,10*L);
+beq(2) = 25;
+% A(13+L+2,:) = [P0,P1,P2,P3,P4,P5,P6,P7,P8,P9];
+% b(13+L+2) = 25;
+% A(13+L+3,:) = -[P0,P1,P2,P3,P4,P5,P6,P7,P8,P9];
+% b(13+L+3) = -25;
 
 
 % finally, put together big WAR matrix
@@ -221,15 +228,21 @@ intcon = (1:length(c))';
 f = -c;
 lb = zeros(length(c),1);
 ub = ones(length(c),1);
-Aeq = [];
-beq = [];
-
 x = intlinprog(f,intcon,A,b,Aeq,beq,lb,ub);
 
 % now find which players made the cut!
 
 list = find(x);
 roster = player(list);
+
+rosterpos = [];
+for i = 0:9
+    rosterpos = [rosterpos;i*ones(L,1)];
+end
+positions = rosterpos(list);
+rosterWAR = c(list);
+optWAR = sum(rosterWAR);
+rostersalary = A(end,list);
 
 
 
