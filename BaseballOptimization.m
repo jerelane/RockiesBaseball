@@ -221,7 +221,9 @@ player = play;
 % DONE! now save A,b,c and player name data
 
 save('A.mat','A')
+save('Aeq.mat','Aeq')
 save('b.mat','b')
+save('beq.mat','beq')
 save('c.mat','c')
 save('players.mat','player')
 
@@ -239,6 +241,7 @@ toc
 list = find(x);
 roster = player(list);
 
+
 rosterpos = [];
 for i = 0:9
     rosterpos = [rosterpos;i*ones(L,1)];
@@ -247,18 +250,20 @@ positions = rosterpos(list);
 rosterWAR = c(list);
 optWAR = sum(rosterWAR);
 rostersalary = A(end,list);
+save('roster.mat','roster')
+save('optWAR.mat','optWAR')
 
-%% call this function to see how WAR changes with budget
-Blim = 200000000;
-[WAR,Brange] = WARvar(f,intcon,A,b,Aeq,beq,lb,ub,Blim);
-
-
-figure
-plot(Brange/(1e6),WAR,'LineWidth',2)
-title('WAR vs Budget')
-xlabel('Budget (Millions of Dollars)')
-ylabel('Total WAR')
-
+%% call this function to see how WAR changes with budget (uncomment the below code block)
+% Blim = 200000000; % max budget in dollars
+% [WAR,Brange] = WARvar(f,intcon,A,b,Aeq,beq,lb,ub,Blim);
+% 
+% 
+% figure
+% plot(Brange/(1e6),WAR,'LineWidth',2)
+% title('WAR vs Budget')
+% xlabel('Budget (Millions of Dollars)')
+% ylabel('Total WAR')
+% 
 
 
 
