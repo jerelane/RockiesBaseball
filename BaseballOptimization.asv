@@ -44,7 +44,7 @@ for i = 2:size(FA,1)
        FAcheck(i-1) = 1;
    end
     
-   if isnan(FA{i,14}) % check to see if there is salary data
+   if isnan(FA{i,14}) % check to s
        if isnan(FA{i,9})
            FAcheck(i-1) = 1;
        else
@@ -132,6 +132,12 @@ Aeq(1,:) = [zeros(1,L),P1,zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L)
     zeros(1,L),zeros(1,L),zeros(1,L)];
 beq(1) = 5;
 
+% A(2,:) = [zeros(1,L),P1,zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),...
+%     zeros(1,L),zeros(1,L),zeros(1,L)];
+% b(2) = 5;
+% A(3,:) = -A(2,:);
+% b(3) = -5;
+
 % catchers
 A(2,:) = -[zeros(1,L),zeros(1,L),P2,zeros(1,L),zeros(1,L),zeros(1,L),zeros(1,L),...
     zeros(1,L),zeros(1,L),zeros(1,L)];
@@ -191,8 +197,15 @@ B = 11501312; % FA budget (adjust this as needed)
 b(11+L+1) = B;
 
 % lastly: only 25 players allowed - EQUALITY CONSTRAINT
+% Aeq(2,:) = [P0,P1,P2,P3,P4,P5,P6,P7,P8,P9];
 Aeq(2,:) = ones(1,10*L);
 beq(2) = 25;
+% A(13+L+2,:) = [P0,P1,P2,P3,P4,P5,P6,P7,P8,P9];
+% b(13+L+2) = 25;
+% A(13+L+3,:) = -[P0,P1,P2,P3,P4,P5,P6,P7,P8,P9];
+% b(13+L+3) = -25;
+
+
 % finally, put together big WAR matrix
 % assumes WAR is the same for all positions for all players
 
@@ -263,38 +276,8 @@ xrng = linspace(Brange(1),Brange(end),1000);
 reg = xvec(1)*xrng.^(1/2)+xvec(2); % regression equation
 plot(xrng,reg,'g-','LineWidth',2)
 
-%% heres the function that simulates budget vs WAR
-function [WAR,Brange] = WARvar(f,intcon,A,b,Aeq,beq,lb,ub,Blim)
-%This function iterates through budget values to see how WAR changes w/ $
 
-% solve time is about 1/2 second, so let it run for 1 hr to get data
-numits = 100;
-Brange = linspace(0,Blim,numits);
-L = size(A,2)/10;
-c = -f;
-for i = 1:numits
-    B = Brange(i);
-    b(11+L+1) = B;
 
-x = intlinprog(f,intcon,A,b,Aeq,beq,lb,ub);
-
-% now find which players made the cut!
-
-list = find(x);
-% roster = player(list);
-
-rosterWAR = c(list);
-WAR(i) = sum(rosterWAR);
-
-end
-
-% figure
-% plot(B/(1e6),WAR,'LineWidth',2)
-% title('WAR vs Budget')
-% xlabel('Budget (Millions of Dollars)')
-% ylabel('Total WAR')
-
-end
 
 
 

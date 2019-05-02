@@ -2,7 +2,7 @@ function [WAR,Brange] = WARvar(f,intcon,A,b,Aeq,beq,lb,ub,Blim)
 %This function iterates through budget values to see how WAR changes w/ $
 
 % solve time is about 1/2 second, so let it run for 1 hr to get data
-numits = 3600;
+numits = 100;
 Brange = linspace(0,Blim,numits);
 L = size(A,2)/10;
 c = -f;
